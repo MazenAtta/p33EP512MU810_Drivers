@@ -2,5 +2,9 @@
     "mplab.clangd.arguments": [
         "--compile-commands-dir=${workspaceRoot}\\_build\\PIC33\\default"
     ],
-    "mplab.clangd.path": ""
+    "mplab.clangd.path": "",
+    "files.associations": {
+        "app.h": "c",
+        "ecu_led.h": "c"
+    }
 }
