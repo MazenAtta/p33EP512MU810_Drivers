@@ -52,7 +52,7 @@ typedef float                   f32;
 typedef double                  f64;
 
 /* Address NULL */
-#define NULL ( (void *) 0x00)
+//#define NULL ( (void *) 0x00)
 
 /* Section Function Declarations */
 

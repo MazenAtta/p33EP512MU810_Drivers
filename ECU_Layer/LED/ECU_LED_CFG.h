@@ -1,18 +1,15 @@
 /* 
- * File:   STD_LIBRARIES.h
+ * File:   ECU_LED_CFG.h
  * Author: Mazen.Atta
  *
- * Created on February 22, 2025, 6:17 PM
+ * Created on March 9, 2025, 12:45 PM
  */
 
-#ifndef STD_LIBRARIES_H
-#define	STD_LIBRARIES_H
+#ifndef ECU_LED_CFG_H
+#define	ECU_LED_CFG_H
 
 /* Section : includes */
-#include <stdio.h>
-#include <stdlib.h>
-#define FCY 40000000UL
-#include <libpic30.h>
+
 /* Section : includes */
 
 /* Section : Macro Declarations */
@@ -23,6 +20,5 @@
 
 /* Section Function Declarations */
 
-
-#endif	/* STD_LIBRARIES_H */
+#endif	/* ECU_LED_CFG_H */
 
