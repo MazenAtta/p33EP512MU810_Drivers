@@ -11,27 +11,29 @@
 /*
  * 
  */
+
 pin_config_t led1 = {
 .port = PORTA_INDEX,
 .pin =  GPIO_PIN0,
 .direction = GPIO_DIRECTION_OUTPUT,
 .logic = GPIO_LOW
 };
+
 int main() {
     // all analog pins disabled
     ANSELA = ANSELB = ANSELC = ANSELD = ANSELE = ANSELG = 0x0000;
     
-    /*TRISEbits.TRISE8 = 1; //Button pin as input
-    TRISAbits.TRISA0 = 0;
-    LATAbits.LATA0 = 0;*/
+    //TRISEbits.TRISE8 = 1; //Button pin as input
+    TRISGbits.TRISG9 = 0;
+    LATGbits.LATG9 = 0;
     
     Std_ReturnType ret = E_NOT_OK;
     ret = gpio_pin_direction_intialize(&led1);
-    gpio_pin_write_logic(&led1, GPIO_HIGH);
-    //LATAbits.LATA0 = 1;
+    ret = gpio_pin_write_logic(&led1, GPIO_HIGH);
+    LATGbits.LATG9 = 1;
     
-    /*while(1)
-    {}*/
+    while(1)
+    {}
 
     
     /*while(1)
