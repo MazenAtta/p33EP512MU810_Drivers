@@ -1,0 +1,5 @@
+E:/Master/Y1S2/Embedded Systems/Projects/_build/PIC33/default/CMakeFiles/PIC33_default_default_XC16_compile.dir
+E:/Master/Y1S2/Embedded Systems/Projects/_build/PIC33/default/CMakeFiles/PIC33_default_default.hex.dir
+E:/Master/Y1S2/Embedded Systems/Projects/_build/PIC33/default/CMakeFiles/PIC33_default_Bin2Hex.dir
+E:/Master/Y1S2/Embedded Systems/Projects/_build/PIC33/default/CMakeFiles/edit_cache.dir
+E:/Master/Y1S2/Embedded Systems/Projects/_build/PIC33/default/CMakeFiles/rebuild_cache.dir

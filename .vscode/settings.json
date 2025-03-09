@@ -1,0 +1,6 @@
+{
+    "mplab.clangd.arguments": [
+        "--compile-commands-dir=${workspaceRoot}\\_build\\PIC33\\default"
+    ],
+    "mplab.clangd.path": ""
+}
