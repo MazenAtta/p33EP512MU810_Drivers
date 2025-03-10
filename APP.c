@@ -35,24 +35,36 @@ button_t but1 = {
 };
 
 int main() {
-    // all analog pins disabled
+    // Disable all analog pins
     ANSELA = ANSELB = ANSELC = ANSELD = ANSELE = ANSELG = 0x0000;
-    button_state_t btn_status = BUTTON_RELEASED;
+
+    button_state_t btn_valid_status = BUTTON_RELEASED;
+    button_state_t btn_last_valid_status = BUTTON_RELEASED;
+
     led_intialize(&led2);
-    //led_turn_on(&led2);        
     button_intialize(&but1);
-    
-    
-    
+
+    uint64 btn_counter = 0;
+    uint8_t btn_pressed = 0; // Flag to track button press event
+
     while(1)
     {
-        button_read_state(&but1, &btn_status);
-        
-        if (btn_status == BUTTON_PRESSED){
-            __delay_ms(150);
-            led_toggle(&led2); 
-        }               
+        button_read_state(&but1, &btn_valid_status);
+
+        // If the button state is stable (no bouncing)
+        if ((btn_valid_status == btn_last_valid_status) && (btn_valid_status == BUTTON_PRESSED)) { //remove the second check (btn_valid_status == BUTTON_PRESSED) for second assignment
+            btn_counter++;
+
+            if (btn_counter > 1000000 && btn_pressed == 0) {  
+                btn_pressed = 1;  // Mark the button as pressed
+                led_toggle(&led2); // Toggle LED once per press
+            }
+        } else {
+            btn_counter = 0;
+            btn_pressed = 0;  // Reset flag when button is released
+        }
+
+        btn_last_valid_status = btn_valid_status;
     }
     return (EXIT_SUCCESS);
 }
-

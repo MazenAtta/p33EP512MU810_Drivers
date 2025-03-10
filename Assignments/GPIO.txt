@@ -1,30 +1,70 @@
-    TRISEbits.TRISE8 = 1; //Button pin as input
-    TRISAbits.TRISA0 = 0;
-    LATAbits.LATA0 = 0;    
-    LATAbits.LATA0 = 1;
-    
-    while(1)
-    {}
+/* 
+ * File:   APP.c
+ * Author: Mazen.Atta
+ *
+ * Created on February 22, 2025, 6:33 PM
+ */
 
-    
-    /*while(1)
+
+#include "APP.h"
+
+/*
+ * 
+ */
+
+pin_config_t led1 = {
+.port = PORTG_INDEX,
+.pin =  GPIO_PIN9,
+.direction = GPIO_DIRECTION_OUTPUT,
+.logic = GPIO_LOW
+};
+
+led_t led2 = {
+.port_name = PORTA_INDEX,
+.pin = GPIO_PIN0,
+.led_status = GPIO_LOW
+};
+
+button_t but1 = {
+.button_pin.port = PORTE_INDEX,
+.button_pin.pin = GPIO_PIN8,
+.button_pin.direction = GPIO_DIRECTION_INPUT,
+.button_pin.logic = GPIO_LOW,
+.button_connection = BUTTON_ACTIVE_LOW,
+.button_state = BUTTON_RELEASED
+};
+
+int main() {
+    // Disable all analog pins
+    ANSELA = ANSELB = ANSELC = ANSELD = ANSELE = ANSELG = 0x0000;
+
+    button_state_t btn_valid_status = BUTTON_RELEASED;
+    button_state_t btn_last_valid_status = BUTTON_RELEASED;
+
+    led_intialize(&led2);
+    button_intialize(&but1);
+
+    uint32 btn_counter = 0;
+    uint8_t btn_pressed = 0; // Flag to track button press event
+
+    while(1)
     {
-        if(PORTEbits.RE8 == 0) //button pressed due to internal pull up
-        {
-            LATAbits.LATA0 = 1;
+        button_read_state(&but1, &btn_valid_status);
+
+        // If the button state is stable (no bouncing)
+        if ((btn_valid_status == btn_last_valid_status) && (btn_valid_status == BUTTON_PRESSED)) { //remove the second check (btn_valid_status == BUTTON_PRESSED) for second assignment
+            btn_counter++;
+
+            if (btn_counter > 500 && btn_pressed == 0) {  
+                btn_pressed = 1;  // Mark the button as pressed
+                led_toggle(&led2); // Toggle LED once per press
+            }
+        } else {
+            btn_counter = 0;
+            btn_pressed = 0;  // Reset flag when button is released
         }
-        else if (PORTEbits.RE8 == 1){
-            LATAbits.LATA0 = 0;
-        }
-    }*/
-    /*uint32 button_pressed = 0;
-    while(1){
-      if(!PORTEbits.RE8 && !button_pressed)
-        {
-            //while(PORTEbits.RE8);
-            button_pressed = 1;
-            LATAbits.LATA0 = ~PORTAbits.RA0;
-        }
-      if (PORTEbits.RE8){
-      button_pressed = 0;}
-    }*/
+
+        btn_last_valid_status = btn_valid_status;
+    }
+    return (EXIT_SUCCESS);
+}

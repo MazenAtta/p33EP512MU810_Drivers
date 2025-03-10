@@ -87,10 +87,10 @@ Default Scalar Model: Small
 section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
 .text                        0x200               0x100           0x180  (384)
-.text                        0x300               0x626           0x939  (2361)
-.dinit                       0x926                0x3c            0x5a  (90)
+.text                        0x300               0x668           0x99c  (2460)
+.dinit                       0x968                0x3c            0x5a  (90)
 
-                 Total "program" memory used (bytes):          0xb13  (2835) <1%
+                 Total "program" memory used (bytes):          0xb76  (2934) <1%
 
 
 Auxflash Memory  [Origin = 0x7fc000, Length = 0x3ffa]
@@ -126,7 +126,7 @@ Info: Project is using a large data memory model when small data memory model is
 
 External Symbols in Data Memory (by address):
 
-                    0x1000                  _btn_tt
+                    0x1000                  _led1
                     0x1002                  _led2
                     0x1004                  _tris_registers
                     0x1012                  _lat_registers
@@ -135,9 +135,9 @@ External Symbols in Data Memory (by address):
 
 External Symbols in Data Memory (by name):
 
-                    0x1000                  _btn_tt
                     0x102e                  _but1
                     0x1012                  _lat_registers
+                    0x1000                  _led1
                     0x1002                  _led2
                     0x1020                  _port_registers
                     0x1004                  _tris_registers
@@ -164,9 +164,9 @@ External Symbols in Program Memory (by address):
                   0x000710                  _led_turn_on
                   0x000770                  _led_turn_off
                   0x0007ca                  _led_toggle
-                  0x000832                  _button_intialize
-                  0x000854                  _button_read_state
-                  0x0008bc                  _main
+                  0x000832                  _main
+                  0x0008de                  _button_intialize
+                  0x000900                  _button_read_state
                   0xf80004                  __FGS.sec
 
 External Symbols in Program Memory (by name):
@@ -177,8 +177,8 @@ External Symbols in Program Memory (by name):
                   0x000248                  __data_init_extended
                   0x00023c                  __psv_init
                   0x000200                  __resetPRI
-                  0x000832                  _button_intialize
-                  0x000854                  _button_read_state
+                  0x0008de                  _button_intialize
+                  0x000900                  _button_read_state
                   0x000300                  _gpio_pin_direction_intialize
                   0x0003b2                  _gpio_pin_get_direction_status
                   0x00050a                  _gpio_pin_intialize
@@ -194,7 +194,7 @@ External Symbols in Program Memory (by name):
                   0x0007ca                  _led_toggle
                   0x000770                  _led_turn_off
                   0x000710                  _led_turn_on
-                  0x0008bc                  _main
+                  0x000832                  _main
 
 Memory Configuration
 
@@ -276,7 +276,7 @@ usercode
 
 __FGS             0xf80004          0x2
  *(__FGS.sec*)
- __FGS.sec        0xf80004          0x2 /CW/_FGS°cí
+ __FGS.sec        0xf80004          0x2 /CW/_FGSÀsä
                   0xf80004                  __FGS.sec
 
 __FOSCSEL
@@ -303,12 +303,12 @@ __FUID0
 .comment
  *(.comment)
 
-.debug_info       0x000000       0x182e
+.debug_info       0x000000       0x185c
  *(.debug_info)
  .debug_info      0x000000        0x3f5 build/default/production/ECU_Layer/LED/ECU_LED.o
  .debug_info      0x0003f5        0x9f8 build/default/production/MCAL_Layer/GPIO/HAL_GPIO.o
- .debug_info      0x000ded        0x64f build/default/production/APP.o
- .debug_info      0x00143c        0x3f2 build/default/production/ECU_Layer/BUTTON/ECU_BUTTON.o
+ .debug_info      0x000ded        0x67d build/default/production/APP.o
+ .debug_info      0x00146a        0x3f2 build/default/production/ECU_Layer/BUTTON/ECU_BUTTON.o
  *(.gnu.linkonce.wi.*)
 
 .debug_abbrev     0x000000        0x39c
@@ -319,13 +319,13 @@ __FUID0
  .debug_abbrev    0x00020f         0xd3 build/default/production/APP.o
  .debug_abbrev    0x0002e2         0xba build/default/production/ECU_Layer/BUTTON/ECU_BUTTON.o
 
-.debug_line       0x000000        0x5af
+.debug_line       0x000000        0x5b4
  *(.debug_line)
  .debug_line      0x000000         0xf9 build/default/production/ECU_Layer/LED/ECU_LED.o
  .debug_line      0x0000f9        0x1ea build/default/production/MCAL_Layer/GPIO/HAL_GPIO.o
  .debug_line      0x0002e3         0x1a build/default/production/MCAL_Layer/DEVICE_CONFIG.o
- .debug_line      0x0002fd        0x1cd build/default/production/APP.o
- .debug_line      0x0004ca         0xe5 build/default/production/ECU_Layer/BUTTON/ECU_BUTTON.o
+ .debug_line      0x0002fd        0x1d2 build/default/production/APP.o
+ .debug_line      0x0004cf         0xe5 build/default/production/ECU_Layer/BUTTON/ECU_BUTTON.o
 
 .debug_frame      0x000000        0x224
  *(.debug_frame)
@@ -346,16 +346,16 @@ __FUID0
  *(.debug_macinfo)
 
 .debug_pubnames
-                  0x000000        0x24b
+                  0x000000        0x249
  *(.debug_pubnames)
  .debug_pubnames
                   0x000000         0x54 build/default/production/ECU_Layer/LED/ECU_LED.o
  .debug_pubnames
                   0x000054        0x182 build/default/production/MCAL_Layer/GPIO/HAL_GPIO.o
  .debug_pubnames
-                  0x0001d6         0x38 build/default/production/APP.o
+                  0x0001d6         0x36 build/default/production/APP.o
  .debug_pubnames
-                  0x00020e         0x3d build/default/production/ECU_Layer/BUTTON/ECU_BUTTON.o
+                  0x00020c         0x3d build/default/production/ECU_Layer/BUTTON/ECU_BUTTON.o
 
 .debug_ranges
  *(.debug_ranges)
@@ -3078,41 +3078,41 @@ LOAD c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libm-elf.a
 LOAD c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a
 END GROUP
 OUTPUT(dist/default/production/Projects.production.elf elf32-pic30)
-LOAD /CW/_FGS°cí
+LOAD /CW/_FGSÀsä
 LOAD default_isr
 LOAD data_init
 
 .debug_pubtypes
-                  0x000060        0x1e9
+                  0x000060        0x1f5
  .debug_pubtypes
                   0x000060         0x55 build/default/production/ECU_Layer/LED/ECU_LED.o
  .debug_pubtypes
                   0x0000b5         0x85 build/default/production/MCAL_Layer/GPIO/HAL_GPIO.o
  .debug_pubtypes
-                  0x00013a         0x84 build/default/production/APP.o
+                  0x00013a         0x90 build/default/production/APP.o
  .debug_pubtypes
-                  0x0001be         0x8b build/default/production/ECU_Layer/BUTTON/ECU_BUTTON.o
+                  0x0001ca         0x8b build/default/production/ECU_Layer/BUTTON/ECU_BUTTON.o
 
 __c30_signature
-                  0x000249         0x2a
+                  0x000255         0x2a
  __c30_signature
-                  0x000249          0x6 build/default/production/ECU_Layer/LED/ECU_LED.o
+                  0x000255          0x6 build/default/production/ECU_Layer/LED/ECU_LED.o
  __c30_signature
-                  0x00024f          0x6 build/default/production/MCAL_Layer/GPIO/HAL_GPIO.o
+                  0x00025b          0x6 build/default/production/MCAL_Layer/GPIO/HAL_GPIO.o
  __c30_signature
-                  0x000255          0x6 build/default/production/MCAL_Layer/DEVICE_CONFIG.o
+                  0x000261          0x6 build/default/production/MCAL_Layer/DEVICE_CONFIG.o
  __c30_signature
-                  0x00025b          0x6 build/default/production/APP.o
+                  0x000267          0x6 build/default/production/APP.o
  __c30_signature
-                  0x000261          0x6 build/default/production/ECU_Layer/BUTTON/ECU_BUTTON.o
+                  0x00026d          0x6 build/default/production/ECU_Layer/BUTTON/ECU_BUTTON.o
  __c30_signature
-                  0x000267          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(crt0_extendedep.o)
+                  0x000273          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(crt0_extendedep.o)
  __c30_signature
-                  0x00026d          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(data_init_extended.o)
+                  0x000279          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(data_init_extended.o)
 
 .ndata              0x1000          0x2
  .ndata             0x1000          0x2 build/default/production/APP.o
-                    0x1000                  _btn_tt
+                    0x1000                  _led1
 
 .nbss               0x1002          0x2
  .nbss              0x1002          0x2 build/default/production/APP.o
@@ -3148,7 +3148,7 @@ __c30_signature
 .config_IESO      0xf80006          0x2
  .config_IESO     0xf80006          0x2 build/default/production/MCAL_Layer/DEVICE_CONFIG.o
 
-.text             0x000300        0x626
+.text             0x000300        0x668
  .text            0x000300        0x3a8 build/default/production/MCAL_Layer/GPIO/HAL_GPIO.o
                   0x000300                  _gpio_pin_direction_intialize
                   0x0003b2                  _gpio_pin_get_direction_status
@@ -3166,11 +3166,11 @@ __c30_signature
                   0x000710                  _led_turn_on
                   0x000770                  _led_turn_off
                   0x0007ca                  _led_toggle
- .text            0x000832         0x8a build/default/production/ECU_Layer/BUTTON/ECU_BUTTON.o
-                  0x000832                  _button_intialize
-                  0x000854                  _button_read_state
- .text            0x0008bc         0x6a build/default/production/APP.o
-                  0x0008bc                  _main
+ .text            0x000832         0xac build/default/production/APP.o
+                  0x000832                  _main
+ .text            0x0008de         0x8a build/default/production/ECU_Layer/BUTTON/ECU_BUTTON.o
+                  0x0008de                  _button_intialize
+                  0x000900                  _button_read_state
 
-.dinit            0x000926         0x3c
- .dinit           0x000926         0x3c data_init
+.dinit            0x000968         0x3c
+ .dinit           0x000968         0x3c data_init
