@@ -44,7 +44,7 @@ int main() {
     led_intialize(&led2);
     button_intialize(&but1);
 
-    uint64 btn_counter = 0;
+    uint32 btn_counter = 0;
     uint8_t btn_pressed = 0; // Flag to track button press event
 
     while(1)
@@ -55,7 +55,7 @@ int main() {
         if ((btn_valid_status == btn_last_valid_status) && (btn_valid_status == BUTTON_PRESSED)) { //remove the second check (btn_valid_status == BUTTON_PRESSED) for second assignment
             btn_counter++;
 
-            if (btn_counter > 1000000 && btn_pressed == 0) {  
+            if (btn_counter > 500 && btn_pressed == 0) {  
                 btn_pressed = 1;  // Mark the button as pressed
                 led_toggle(&led2); // Toggle LED once per press
             }
@@ -66,5 +66,6 @@ int main() {
 
         btn_last_valid_status = btn_valid_status;
     }
+    //whatever
     return (EXIT_SUCCESS);
 }

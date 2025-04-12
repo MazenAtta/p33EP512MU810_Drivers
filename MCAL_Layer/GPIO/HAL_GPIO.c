@@ -8,11 +8,37 @@
 #include "HAL_GPIO.h"
 
 /* Reference to the Data Control Registers */
-volatile uint16 *tris_registers[] = {&TRISA, &TRISB, &TRISC, &TRISD, &TRISE, &TRISF, &TRISG};
+volatile uint16 *tris_registers[] = {
+    (volatile uint16 *)&TRISA,
+    (volatile uint16 *)&TRISB,
+    (volatile uint16 *)&TRISC,
+    (volatile uint16 *)&TRISD,
+    (volatile uint16 *)&TRISE,
+    (volatile uint16 *)&TRISF,
+    (volatile uint16 *)&TRISG
+};
+
 /* Reference to the Data Latch Registers */
-volatile uint16 *lat_registers[] = {&LATA, &LATB, &LATC, &LATD, &LATE, &LATF, &LATG};
+volatile uint16 *lat_registers[] = {
+    (volatile uint16 *)&LATA,
+    (volatile uint16 *)&LATB,
+    (volatile uint16 *)&LATC,
+    (volatile uint16 *)&LATD,
+    (volatile uint16 *)&LATE,
+    (volatile uint16 *)&LATF,
+    (volatile uint16 *)&LATG
+};
+
 /* Reference to the Data Port Registers */
-volatile uint16 *port_registers[] = {&PORTA, &PORTB, &PORTC, &PORTD, &PORTE, &PORTF, &PORTG};
+volatile uint16 *port_registers[] = {
+    (volatile uint16 *)&PORTA,
+    (volatile uint16 *)&PORTB,
+    (volatile uint16 *)&PORTC,
+    (volatile uint16 *)&PORTD,
+    (volatile uint16 *)&PORTE,
+    (volatile uint16 *)&PORTF,
+    (volatile uint16 *)&PORTG
+};
 
 
 // Pin declarations functions
