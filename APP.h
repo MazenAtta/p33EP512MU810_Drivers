@@ -11,7 +11,7 @@
 /* Section : includes */
 #include "ECU_Layer/LED/ECU_LED.h"
 #include "ECU_Layer/BUTTON/ECU_BUTTON.h"
-
+#include "MCAL_Layer/TIMER/HAL_TIMER.h"
 
 /* Section : includes */
 

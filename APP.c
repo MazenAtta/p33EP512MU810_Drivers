@@ -11,61 +11,54 @@
 /*
  * 
  */
+volatile int counter = 0;  // updated in ISR
+void blink_LD2();
 
-pin_config_t led1 = {
-.port = PORTG_INDEX,
-.pin =  GPIO_PIN9,
-.direction = GPIO_DIRECTION_OUTPUT,
-.logic = GPIO_LOW
-};
-
-led_t led2 = {
-.port_name = PORTA_INDEX,
-.pin = GPIO_PIN0,
-.led_status = GPIO_LOW
-};
-
-button_t but1 = {
-.button_pin.port = PORTE_INDEX,
-.button_pin.pin = GPIO_PIN8,
-.button_pin.direction = GPIO_DIRECTION_INPUT,
-.button_pin.logic = GPIO_LOW,
-.button_connection = BUTTON_ACTIVE_LOW,
-.button_state = BUTTON_RELEASED
-};
 
 int main() {
     // Disable all analog pins
     ANSELA = ANSELB = ANSELC = ANSELD = ANSELE = ANSELG = 0x0000;
+    
+    TRISAbits.TRISA0 = 0;
+    TRISGbits.TRISG9 = 0;
+    RPINR0bits.INT1R = 88;
+    INTCON2bits.GIE = 1;
+    IFS1bits.INT1IF = 0;
+    IEC1bits.INT1IE = 1;
+    IEC0bits.T1IE = 0;
+    IEC0bits.T2IE = 0;
 
-    button_state_t btn_valid_status = BUTTON_RELEASED;
-    button_state_t btn_last_valid_status = BUTTON_RELEASED;
-
-    led_intialize(&led2);
-    button_intialize(&but1);
-
-    uint32 btn_counter = 0;
-    uint8_t btn_pressed = 0; // Flag to track button press event
-
+    //tmr1_set_callback(blink_LD2);
+    
+    tmr_setup_period(TIMER2, 200);
+    tmr_setup_period(TIMER1,100);
     while(1)
     {
-        button_read_state(&but1, &btn_valid_status);
-
-        // If the button state is stable (no bouncing)
-        if ((btn_valid_status == btn_last_valid_status) && (btn_valid_status == BUTTON_PRESSED)) { //remove the second check (btn_valid_status == BUTTON_PRESSED) for second assignment
-            btn_counter++;
-
-            if (btn_counter > 500 && btn_pressed == 0) {  
-                btn_pressed = 1;  // Mark the button as pressed
-                led_toggle(&led2); // Toggle LED once per press
-            }
-        } else {
-            btn_counter = 0;
-            btn_pressed = 0;  // Reset flag when button is released
-        }
-
-        btn_last_valid_status = btn_valid_status;
+        LATAbits.LATA0 ^= 1;
+        tmr_wait_period(TIMER2);
+        LATAbits.LATA0 ^= 1;
+        tmr_wait_period(TIMER2);        
     }
-    //whatever
+    
     return (EXIT_SUCCESS);
+}
+
+
+
+void __attribute__((__interrupt__, __auto_psv__)) _INT1Interrupt(void)
+{
+        IFS1bits.INT1IF = 0; // Clear interrupt flag
+        LATGbits.LATG9 ^= 1;  // Toggle LD2   
+}
+
+
+void blink_LD2()
+{
+    static int counter = 0;
+
+    counter++;
+    if (counter >= 5) {
+        LATGbits.LATG9 ^= 1;  // Toggle LD2
+        counter = 0;
+    }
 }
