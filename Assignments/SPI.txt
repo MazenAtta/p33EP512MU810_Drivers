@@ -1,0 +1,110 @@
+/* 
+ * File:   APP.c
+ * Author: Mazen.Atta
+ *
+ * Created on February 22, 2025, 6:33 PM
+ */
+
+#include "APP.h"
+
+unsigned int spi_write(unsigned int data);
+void uart_send(char data);
+
+int main() {
+    // Disable all analog pins
+    ANSELA = ANSELB = ANSELC = ANSELD = ANSELE = ANSELG = 0x0000;
+
+    RPINR18bits.U1RXR = 75;
+    RPOR0bits.RP64R =1;
+    
+    char received_ch;
+    
+    U1BRG = 468; // (72000000) / (16 ? 9600)? 1
+    U1MODEbits.UARTEN = 1; // enable UART
+    U1STAbits.UTXEN = 1; // enable U1TX (must be after UARTEN)
+    
+    unsigned int data;
+
+    // === Configure I/O Directions ===
+    TRISAbits.TRISA0 = 0;  // LED output
+    TRISGbits.TRISG9 = 0;
+    
+    TRISAbits.TRISA1 = 1;  // MISO (RPI17)
+    TRISFbits.TRISF12 = 0; // SCK  (RP108)
+    TRISFbits.TRISF13 = 0; // MOSI (RP109)
+    
+    TRISDbits.TRISD6 = 0;  // CS3 for magnetometer
+    TRISBbits.TRISB4 = 0;
+    TRISBbits.TRISB3 = 0;
+
+    // === Default CS States ===
+    LATDbits.LATD6 = 1;    // CS3 HIGH (not selected)
+    LATBbits.LATB3 = 1;    // CS2 HIGH (not used)
+    LATBbits.LATB4 = 1;   // CS1 HIGH (not used)
+
+    // === Remap SPI1 Pins ===
+    RPINR20bits.SDI1R = 0b0010001;  // SDI1 (MISO) <- RPI17 (RA1)
+    RPOR12bits.RP109R = 0b000101;   // SDO1 (MOSI) -> RP109 (RF13)
+    RPOR11bits.RP108R = 0b000110;   // SCK1 -> RP108 (RF12)
+
+    // === Configure SPI1 ===
+    SPI1STATbits.SPIEN = 0;         // Disable SPI before config
+    SPI1CON1bits.MSTEN = 1;         // Master mode
+    SPI1CON1bits.MODE16 = 0;        // 8-bit mode
+    SPI1CON1bits.CKP = 1;           // Clock idle low (CPOL = 0)
+    SPI1CON1bits.CKE = 0;           // Data changes on transition from active to idle (CPHA = 0)
+    SPI1CON1bits.SPRE = 0b100;      // Secondary prescaler 1:1
+    SPI1CON1bits.PPRE = 0b01;       // Primary prescaler 1:1
+    SPI1STATbits.SPIEN = 1;         // Enable SPI
+
+    // Put magnetometer to sleep
+    LATDbits.LATD6 = 0;
+    spi_write(0x4B);  // Power control register
+    spi_write(0x00);  // Sleep mode
+    LATDbits.LATD6 = 1;
+
+    // Wake up magnetometer
+    LATDbits.LATD6 = 0;
+    spi_write(0x4B);
+    spi_write(0x01);  // Active mode
+    LATDbits.LATD6 = 1;
+
+    tmr_wait_ms(TIMER1, 3);
+    
+    // === Read Chip ID from Magnetometer (register 0x40) ===
+    LATDbits.LATD6 = 0;                     // CS LOW to start transmission
+    
+    spi_write(0x40 | 0x80);                 // Send read command (READ + reg 0x40)
+    data = spi_write(0x00);                 // Send dummy byte to receive data
+    LATDbits.LATD6 = 1;                     // CS HIGH to end transmission
+
+    // Check if ID matches expected value
+    if (data == 0x32) {
+        LATAbits.LATA0 = 1;  // Turn on LED if ID matches
+        uart_send(data);
+    } else {
+        LATGbits.LATG9 = 1;  // Turn on other LED if mismatch
+        uart_send(data);
+    }
+
+    while (1) {
+        // Main loop does nothing; could add more debug here
+    }
+
+    return (EXIT_SUCCESS);
+}
+
+
+void uart_send(char data) {
+    while(U1STAbits.UTXBF);  // Wait until transmit buffer is empty
+    U1TXREG = data;          // Send the character
+}
+
+
+// === SPI Write Function ===
+unsigned int spi_write(unsigned int data) {
+    while (SPI1STATbits.SPITBF == 1);  // Wait until transmit buffer is empty
+    SPI1BUF = data;                    // Send data
+    while (SPI1STATbits.SPIRBF == 0); // Wait for receive buffer full
+    return SPI1BUF;                    // Return received data
+}

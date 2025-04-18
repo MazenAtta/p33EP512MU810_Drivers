@@ -90,7 +90,7 @@ void tmr_wait_ms(int timer, int ms)
     }
 }
 
-
+/*
 void __attribute__((__interrupt__, __auto_psv__)) _T1Interrupt(void)
 {
     IFS0bits.T1IF = 0;  // Clear interrupt flag
@@ -117,4 +117,4 @@ void tmr1_set_callback(TimerCallback cb)
 void tmr2_set_callback(TimerCallback cb)
 {
     tmr2_callback = cb;
-}
+}*/
