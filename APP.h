@@ -12,7 +12,7 @@
 #include "ECU_Layer/LED/ECU_LED.h"
 #include "ECU_Layer/BUTTON/ECU_BUTTON.h"
 #include "MCAL_Layer/TIMER/HAL_TIMER.h"
-
+#include "MCAL_Layer/UART/MCAL_UART.h"
 /* Section : includes */
 
 /* Section : Macro Declarations */

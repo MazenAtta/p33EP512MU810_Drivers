@@ -35,3 +35,34 @@ int main() {
     
     return (EXIT_SUCCESS);
 }
+
+
+
+
+void uart1_init() {
+    // Remap pins for UART1
+    RPINR18bits.U1RXR = 75; // RX = RD11
+    RPOR0bits.RP64R = 1;    // TX = RD0
+
+    U1BRG = 468; // 9600 baud at Fcy = 72MHz
+    U1MODEbits.UARTEN = 1;
+    U1STAbits.UTXEN = 1;
+    INTCON2bits.GIE = 1;
+
+    IFS0bits.U1RXIF = 0;
+    IEC0bits.U1RXIE = 1;
+    IPC2bits.U1RXIP = 1;
+}
+
+
+void __attribute__((__interrupt__, __auto_psv__)) _U1RXInterrupt(void)
+{
+    IFS0bits.U1RXIF = 0;  // Clear interrupt flag
+    char c = U1RXREG;
+
+    // read data from UART and parse data
+    
+    //if data valid (1,2,4,5,10) update freq
+    
+    //if data non valid send $ERR,1 to UART
+}
