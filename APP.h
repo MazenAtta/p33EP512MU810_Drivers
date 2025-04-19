@@ -13,6 +13,7 @@
 #include "ECU_Layer/BUTTON/ECU_BUTTON.h"
 #include "MCAL_Layer/TIMER/HAL_TIMER.h"
 #include "MCAL_Layer/UART/MCAL_UART.h"
+#include "MCAL_Layer/UART/parser.h"
 /* Section : includes */
 
 /* Section : Macro Declarations */

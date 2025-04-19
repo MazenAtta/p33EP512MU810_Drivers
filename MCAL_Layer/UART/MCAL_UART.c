@@ -1,6 +1,6 @@
 #include "MCAL_UART.h"
 
-void uart1_init(CircularBuffer *buf) {
+void uart1_init() {
     // Remap pins for UART1
     RPINR18bits.U1RXR = 75; // RX = RD11
     RPOR0bits.RP64R = 1;    // TX = RD0
@@ -8,16 +8,24 @@ void uart1_init(CircularBuffer *buf) {
     U1BRG = 468; // 9600 baud at Fcy = 72MHz
     U1MODEbits.UARTEN = 1;
     U1STAbits.UTXEN = 1;
-    INTCON2bits.GIE = 1;
 
     IFS0bits.U1RXIF = 0;
     IEC0bits.U1RXIE = 1;
     IPC2bits.U1RXIP = 1;
-    
-    buffer_init(&buf);  // Initialize the circular buffer
-
 }
 
+
+void uart_send_char(char data) {
+    while (U1STAbits.UTXBF); // Wait until the transmit buffer is not full
+    U1TXREG = data;          // Transmit the character
+}
+
+void uart_send_string(const char *str) {
+    while (*str) { // Loop until the null character is encountered
+        uart_send_char(*str); // Send the current character
+        str++; // Move to the next character
+    }
+}
 // Initialize the buffer
 void buffer_init(CircularBuffer *buf) {
     buf->head = 0;
@@ -59,11 +67,6 @@ int buffer_is_empty(CircularBuffer *buf) {
 // Check if the buffer is full
 int buffer_is_full(CircularBuffer *buf) {
     return (buf->count == UART_BUFFER_SIZE);
-}
-
-void uart_send_char(char data) {
-    while (U1STAbits.UTXBF); // Wait until the transmit buffer is not full
-    U1TXREG = data;          // Transmit the character
 }
 
 void uart_send_buffer(CircularBuffer *buf) {
