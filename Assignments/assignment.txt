@@ -17,8 +17,7 @@ void algorithm();
 
 volatile int tmr1_counter = 0, tmr2_counter = 0;
 volatile int freq = 5;
-int16_t mag_x = 0 , mag_y = 0, mag_z = 0;
-int send_to_uart_flag;
+
 
 int main() {
     // Disable all analog pins
@@ -41,10 +40,10 @@ int main() {
     tmr_setup_period(TIMER2,7);
     
     uart1_init();
-    buffer_init(&uart_rx_buffer);
     
     spi_init();
-
+    buffer_init(&uart_rx_buffer);
+    
     while (1) {
         // Main loop does nothing; could add more debug here
         algorithm(); //// simulate 7ms work
@@ -74,6 +73,7 @@ int main() {
             }
         }
         }
+
         //enable interrupt after critical region
         INTCON2bits.GIE = 1;
 
@@ -111,9 +111,7 @@ void __attribute__((__interrupt__, __auto_psv__)) _T1Interrupt(void)
     
     if((tmr1_counter % 4) == 0)
     {
-        //acquire data from SPI
-        bmx055_read_xyz(&mag_x, &mag_y, &mag_z);
-        
+        //acquire data from SPI 
     }
     if((tmr1_counter % 50) == 0)
     {
@@ -124,11 +122,9 @@ void __attribute__((__interrupt__, __auto_psv__)) _T1Interrupt(void)
     //Do the average of the last 5 measurements and compute the angle using atan2(y_avg, x_avg)
     
     //send the avg data to UART
-    if (freq > 0 && (tmr1_counter %  (100/freq) == 0))
+    if ((tmr1_counter %  (1/freq*1000)/10) == 0)
     {
-        send_to_uart_flag = 1;
        //send the avg x,y,z to the UART
-       send_mag_data(mag_x, mag_y, mag_z);
     }
     //send the angle every 5Hz (200ms)
     if ((tmr1_counter % 20) == 0)

@@ -31,6 +31,6 @@ int buffer_read(CircularBuffer *buf, char *data);
 int buffer_is_empty(CircularBuffer *buf);
 int buffer_is_full(CircularBuffer *buf);
 void uart_send_buffer(CircularBuffer *buf);
-
+void send_mag_data(int16_t x, int16_t y, int16_t z);
 #endif	/* MCAL_UART_H */
 

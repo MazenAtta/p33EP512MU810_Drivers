@@ -76,3 +76,8 @@ void uart_send_buffer(CircularBuffer *buf) {
     }
 }
 
+void send_mag_data(int16_t x, int16_t y, int16_t z) {
+    char uart_msg[64];
+    sprintf(uart_msg, "$MAG,%d,%d,%d*\n", x, y, z);
+    uart_send_string(uart_msg);
+}
