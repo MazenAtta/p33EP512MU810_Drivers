@@ -14,6 +14,8 @@
 #include "MCAL_Layer/TIMER/HAL_TIMER.h"
 #include "MCAL_Layer/UART/MCAL_UART.h"
 #include "MCAL_Layer/UART/parser.h"
+#include "MCAL_Layer/SPI/MCAL_SPI.h"
+
 /* Section : includes */
 
 /* Section : Macro Declarations */

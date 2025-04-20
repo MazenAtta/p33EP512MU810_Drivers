@@ -32,14 +32,18 @@ int main() {
     TRISGbits.TRISG9 = 0;
     INTCON2bits.GIE = 1;
     
-    IFS0bits.T1IF = 0;  // Clear interrupt flag
+    IFS0bits.T1IF = 0;  // Clear interrupt flag for Timer1
     IEC0bits.T1IE = 1;    // Enable Timer1 interrupt
 
     
     tmr_setup_period(TIMER1, 10);
-    tmr_setup_period(TIMER2,50);
+    tmr_setup_period(TIMER2,7);
+    
     uart1_init();
+    
+    spi_init();
     buffer_init(&uart_rx_buffer);
+    
     while (1) {
         // Main loop does nothing; could add more debug here
         algorithm(); //// simulate 7ms work
@@ -82,7 +86,7 @@ int main() {
 
 void algorithm()
 {
-   __delay_ms(7);
+    tmr_wait_period(TIMER2);
 }
 
 void __attribute__((__interrupt__, __auto_psv__)) _U1RXInterrupt(void)
