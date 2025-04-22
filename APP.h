@@ -16,7 +16,7 @@
 #include "MCAL_Layer/UART/parser.h"
 #include "MCAL_Layer/SPI/MCAL_SPI.h"
 #include "string.h"
-
+#include "math.h"
 /* Section : includes */
 
 /* Section : Macro Declarations */
