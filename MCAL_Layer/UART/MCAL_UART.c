@@ -9,9 +9,11 @@ void uart1_init() {
     U1MODEbits.UARTEN = 1;
     U1STAbits.UTXEN = 1;
 
+    //Enable UART RX interrupt
     IFS0bits.U1RXIF = 0;
-    IEC0bits.U1RXIE = 1;
-    IPC2bits.U1RXIP = 1;
+    IFS0bits.U1TXIF =0;
+    IEC0bits.U1RXIE = 1;        // Enable UART RX
+    U1STAbits.UTXEN = 1;        // Enable UART TX
 }
 
 

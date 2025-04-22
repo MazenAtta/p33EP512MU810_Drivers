@@ -9,6 +9,7 @@
 #define	MCAL_SPI_H
 
 #include "../../MCAL_Layer/GPIO/HAL_GPIO.h"
+#include"../TIMER/HAL_TIMER.h"
 
 void spi_init();
 unsigned int spi_write(unsigned int data);
